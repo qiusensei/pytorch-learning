@@ -13,13 +13,24 @@ print(x_tensor,x_randn,x_zeros,x_ones,sep="\n")
 
 # 2.创建一个形状为 (2, 3, 4) 的随机 Tensor，然后对它依次做以下操作：
 # 用 .shape 打印原始形状•用 .reshape() 变成 (6, 4)，打印形状
-# 用 .view() 变成 (6, 4)，打印形状•用 .permute(2, 0, 1) 交换维度
-# 打印形状•用 .transpose(0, 2) 交换两维，打印形状
+# 用 .view() 变成 (6, 4)，打印形状•用 .permute(2, 0, 1) 交换维度打印形状
+# 用 .transpose(0, 2) 交换两维，打印形状
 
 x_q2 = torch.randn(2,3,4)
 print(x_q2.shape)
+print(x_q2.reshape(6,4).shape)
+print(x_q2.view(6,4).shape)
+print(x_q2.permute(2,0,1).shape)
+print(x_q2.transpose(0,2).shape)
+
 
 # 3.创建两个矩阵：m1 形状 (3, 4)，m2 形状 (4, 5)•用 torch.matmul() 做乘法，打印结果的形状•用 @ 运算符做乘法，打印结果的形状
-#
-# 4.在文件末尾加一行注释： # ✅ Tensor 基础操作完成
+
+m1 = torch.randn(3,4)
+m2 = torch.randn(4,5)
+result = torch.matmul(m1,m2)
+print(result.shape)
+print((m1 @ m2).shape)
+
+#Tensor 基础操作完成
 
