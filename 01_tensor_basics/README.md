@@ -31,26 +31,29 @@ y.grad_fn在我的例子里打印出来的是<SumBackward0>说明y是由sum()算
 ### super.__init__()
 MyNet继承的是nn.Module，nn.Module自己有一个__init__过程，用于维护参数注册表、层的记录等
 这里使用这个super是为了让nn.Module自己初始化一边，让后面自己的模型能够获得这些参数表与层。
-### nn.Liner() and nn.ReLU()
+### nn.Linear() and nn.ReLU()
 这个可以方便快捷的创建Affine层。
-比如我想创建一个权重W（形状 (4,8)）和 偏置b（形状 (4,)）的Affine层
-只需要让self.layer1 = nn.Liner(8,4)即可，自动创建，非常方便
+比如我想创建一个权重W（形状 (8，4)）和 偏置b（形状 (4,)）的Affine层
+
+nn.Linear()规则如下：
+nn.Linear(**输入维度**, 输出维度)
+  → weight 形状 = (输出维度, **输入维度**)
+  → bias   形状 = (输出维度,)
+
+所以只需要让self.layer1 = nn.Linear(4,8)即可，自动创建，非常方便
 同时可以使用nn.ReLU()来快捷的创建激活函数。
 ### 调用
 在主程序里创建model = MyNet()之后，我们需要初始化一个能够放入网络的张量x
-因为我们的第一层是4x8的权重所以x的列大小必须是4，这里创建的是(5,4)
+因为nn.Linear(4, 8)的**输入维度**是4，所以x的最后一维必须是4，这里创建的是(5,4)
 直接使用model(x)就可以把x放到网络里进行计算
 ### model.named_parameters()
-model.parameters()会返回model里每一个参数的列表，但是用它打印出来的就是一串数字。
+model.parameters()会返回model里每一个参数的列表的生成器（generator），但是用它打印出来的就是一串数字。
 如果想更加清晰的知道每个打印出来的列表是什么，就要用到model.named_parameters()，他会返回名称与参数
-用name，param接收返回的名字与参数后，用in循环打印，结果如下：
-if __name__ == "__main__":
-    model = MyNet()
-    x = torch.randn(5, 4)
-    output = model(x)
-    print("输出形状:", output.shape)
-    for name, param in model.named_parameters():
-        print(f"{name}: shape={param.shape}")
+用name，param接收返回的名字与参数后，用for循环打印，结果如下：
+layer1.weight: shape=torch.Size([8, 4])
+layer1.bias: shape=torch.Size([8])
+layer2.weight: shape=torch.Size([2, 8])
+layer2.bias: shape=torch.Size([2])
 
 # 总结
 至此，我在tensor_demo里学习类似numpy的torch操作
