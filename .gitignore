@@ -1,1 +1,7 @@
+__pycache__/
+*.pyc
+checkpoints/
+*.pth
+*.pt
+.DS_Store
 .idea/
