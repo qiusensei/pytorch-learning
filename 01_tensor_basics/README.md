@@ -27,14 +27,14 @@ d.grad_fn = <PowBackward0>（由平方算出来的）
 y.grad_fn在我的例子里打印出来的是<SumBackward0>说明y是由sum()算出来的
 
 ## my_net
-在这里我学习了如何使用nn.Module作为父类创建了一个简单网络MyNet
+在这里我学习了如何使用nn.Module作为父类继承了一个简单网络类型MyNet，再使用MyNet创建了一个简单的网络model
 ### super.__init__()
 MyNet继承的是nn.Module，nn.Module自己有一个__init__过程，用于维护参数注册表、层的记录等
 
 这里使用这个super是为了让nn.Module自己初始化一边，让后面自己的模型能够获得这些参数表与层。
 ### nn.Linear() and nn.ReLU()
 这个可以方便快捷的创建Affine层。
-比如我想创建一个权重W（形状 (8，4)）和 偏置b（形状 (4,)）的Affine层
+比如我想创建一个权重W（形状 (8，4)）和 偏置b（形状 (8,)）的Affine层
 
 nn.Linear()规则如下：
 nn.Linear(**输入维度**, 输出维度)
@@ -58,9 +58,32 @@ layer1.bias: shape=torch.Size([8])
 layer2.weight: shape=torch.Size([2, 8])  
 layer2.bias: shape=torch.Size([2])
 
+## dataset_demo
+
+在这里我学习了如何使用Dataset作为父类创建一个简单的**数据集**类型ToyDataset，并使用它创建了一个简单的数据库dataset  
+并使用loader进行了batch的提取
+
+### len(dataset)
+因为在ToyDataset里我们写了__len__(self)所以这里可以直接提取出dataset.features的数量  
+有趣的是，如果假设num_samples = 100  
+这里len(dataset) == features.size(0) == features.shape[0]。  
+他们都返回了dataset中的数据的0维大小（也就是数据一共多少条）。
+
+### loader = DataLoader(dataset,batch_size=16,shuffle=True)
+loader来自DataLoader,它是一个**工具**，能够把原来dataset中的100条sample按照16均分成小batch，多的成为最后一组  
+shuffle则是为了让得到的loader中的sample被打乱  
+
+**loader本身并不是一个储存数组的块**，它是一个用于读取dataset的工具  
+用这个例子来说，前6个每个读16个，最后一批不够了所以读出来一个(4, 4)的features和(4,)的labels 
+
+#### for i (batch_features,batch_labels) enumerate(loder)
+由DataLoader生成的loader本身可以被循环，它很神奇  
+当你循环它的时候，loader作为**取数器**会一个个为你取batch，每个batch包含/返回features与labels  
+所以用 for i ... in enumerate(loader)就可以实现对每个batch挨个编号后挨个操作，比如打印
+
 # 总结
 首先，我在tensor_demo里学习类似numpy的torch操作。
 
-然后用autograd_demo学习了如何使用torch进行快速的反向传播计算。
+然后用autograd_demo学习了如何使用torch进行快速的反向传播计算。 并在my_net里学习使用了nn.Module里创建了自己第一个网络模型model并用它打印输出了网络中的权重与偏置。
 
-最后在my_net里学习使用了nn.Module里创建了自己第一个网络模型model并用它打印输出了网络中的权重与偏置。
+最后，我在dataset_demo学习了如何使用dataset创建、储存我所需要的数据，并学会了使用DataLoader创建一个取数器来对dataset里的数据进行分批，同时学会了用enumerate调用loader来提取batch。
