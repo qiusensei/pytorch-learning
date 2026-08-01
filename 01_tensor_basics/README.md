@@ -34,7 +34,7 @@ MyNet继承的是nn.Module，nn.Module自己有一个__init__过程，用于维�
 这里使用这个super是为了让nn.Module自己初始化一边，让后面自己的模型能够获得这些参数表与层。
 ### nn.Linear() and nn.ReLU()
 这个可以方便快捷的创建Affine层。
-比如我想创建一个权重W（形状 (8，4)）和 偏置b（形状 (8,)）的Affine层
+比如我想创建一个权重W（形状 (8，4)）和 偏置b（形状 (4,)）的Affine层
 
 nn.Linear()规则如下：
 nn.Linear(**输入维度**, 输出维度)
