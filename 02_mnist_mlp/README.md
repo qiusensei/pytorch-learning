@@ -15,3 +15,11 @@ MLP只有全连接层（Linear）的神经网络，没有卷积。
 
 
 # iter() and next()
+iter是把loader打包成一个迭代器。  
+> 准确的说。iter()是拿到了一个指向loader的“指针”。
+> 
+next就是返回值并将这个指针往后面移动一格。  
+
+**StopIteration**就是代表迭代器到头了取不出来了。
+>for循环就是靠着捕捉StopIteration来自动结束的
+> 
