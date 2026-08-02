@@ -65,9 +65,9 @@ for epoch in range(num_epochs):   # ← 外层:整个训练集过一遍 = 1 个 
     for images, labels in dataset.train_loader:
         outputs = net(images)               # 1. 前向
         loss = criterion(outputs, labels)   # 2. 算损失
-        loss.backward()                     # 3. 算梯度
-        optimizer.step()                    # 4. 用梯度更新参数
-        optimizer.zero_grad()               # 5. 清梯度,防累加
+        optimizer.zero_grad()               # 3. 清梯度,防累加
+        loss.backward()                     # 4. 算梯度
+        optimizer.step()                    # 5. 用梯度更新参数
         running_loss += loss.item()         # 6. 把一个epoch里面的误差全部在一块
 ```
 也就是最基本的一个结构，一次次算损失然后反向传播算梯度然后更新参数。
@@ -85,4 +85,5 @@ accuracy = total_correct / total_samples
 ```python
 torch.save(net.state_dict(), "checkpoints/mnist_mlp.pth")
 ```
-最后使用torch.save方法保存模型，保存的格式是state_dict() = {参数名: 张量} 字典，是一种标准格式，日后如果再使用可以直接加载。
+最后使用torch.save方法保存模型，保存的格式是state_dict() = {参数名: 张量} 字典，是一种标准格式，日后如果再使用可以直接加载。  
+state_dict():它返回一个 OrderedDict,键是参数名(如fc1.weight、fc1.bias),值是张量。简单的说它只保存权重,不保存模型结构。
