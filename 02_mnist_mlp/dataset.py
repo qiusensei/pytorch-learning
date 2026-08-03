@@ -2,11 +2,11 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision
 
 
-train_dataset = torchvision.datasets.MNIST('./data',
+train_dataset = torchvision.datasets.MNIST('../data',
                                            train=True,
                                            transform=torchvision.transforms.ToTensor(),
                                            download=True)
-test_dataset  = torchvision.datasets.MNIST('./data',
+test_dataset  = torchvision.datasets.MNIST('../data',
                                            train=False,
                                            transform=torchvision.transforms.ToTensor(),
                                            download=True)
