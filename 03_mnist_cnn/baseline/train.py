@@ -5,6 +5,7 @@ import torch.optim as optim
 import dataset
 import model
 import os
+import pandas as pd
 
 import matplotlib.pyplot as plt
 
@@ -13,6 +14,8 @@ os.makedirs("plots", exist_ok=True)             #Create a folder to save train r
 
 num_epochs = 10
 lr = 1e-3
+experiment = "baseline"
+
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("Using device:", device)
 
@@ -57,6 +60,11 @@ if __name__ == "__main__":
         print(f"Test Accuracy:{accuracy:.4f}")
 
     torch.save(net.state_dict(),"checkpoints/mnist_cnn.pth")            #保存模型
+
+    pd.DataFrame({"experiment": experiment,
+                  "epoch": epoch_num,
+                  "loss": epoch_loss,
+                  "acc": epoch_acc}).to_csv("results.csv", index=False)
 
     plt.figure()
     plt.plot(epoch_num, epoch_loss, label="Train Loss", marker="o")
