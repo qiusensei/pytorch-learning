@@ -7,5 +7,6 @@ DATA_DIR = REPO_DIR / "data"
 
 num_epochs = 10
 lr = 1e-3
-batch_size = 64
+train_batch_size = 64
+test_batch_size = 1000
 device = "mps"
