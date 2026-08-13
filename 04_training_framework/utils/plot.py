@@ -1,8 +1,13 @@
 import matplotlib.pyplot as plt
-import os
+from pathlib import Path
+
+PLOT_DIR = Path(__file__).resolve().parents[1] / "plots"
 
 def plot_img(epoch_num, epoch_loss, epoch_acc):
-    os.makedirs("plots", exist_ok=True)
+    PLOT_DIR.mkdir(parents=True, exist_ok=True)
+
+    loss_path = PLOT_DIR / "loss_curve_cnn.png"
+    acc_path = PLOT_DIR / "accuracy_curve_cnn.png"
 
     plt.figure()
     plt.plot(epoch_num, epoch_loss, label="Train Loss", marker="o")
@@ -10,7 +15,7 @@ def plot_img(epoch_num, epoch_loss, epoch_acc):
     plt.ylabel("Loss")
     plt.title("Training Loss Curve")
     plt.legend()
-    plt.savefig("plots/loss_curve_cnn.png", dpi=150)
+    plt.savefig(loss_path, dpi=150)
 
     plt.figure()
     plt.plot(epoch_num, epoch_acc, label="Test Acc", marker="o")
@@ -18,4 +23,4 @@ def plot_img(epoch_num, epoch_loss, epoch_acc):
     plt.ylabel("Acc")
     plt.title("Test Acc Curve")
     plt.legend()
-    plt.savefig("plots/accuracy_curve_cnn.png", dpi=150)
+    plt.savefig(acc_path, dpi=150)

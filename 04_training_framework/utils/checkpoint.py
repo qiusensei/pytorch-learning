@@ -1,10 +1,16 @@
 import torch
-import os
+from pathlib import Path
+
+CHECKPOINT_PATH = (
+        Path(__file__).resolve().parents[1]
+        / "checkpoints"
+        / "mnist_cnn.pth")
+
 
 def save_model(model):
-    os.makedirs("checkpoints", exist_ok=True)  # Create a folder to save my model.
-    torch.save(model.state_dict(),"checkpoints/mnist_cnn.pth")            #保存模型
+    CHECKPOINT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(model.state_dict(),CHECKPOINT_PATH)            #保存模型
 
-def load_model(model, path="checkpoints/mnist_cnn.pth"):
-    model.load_state_dict(torch.load(path, map_location="cpu"))
+def load_model(model, path=CHECKPOINT_PATH, device="cpu"):
+    model.load_state_dict(torch.load(path, map_location=device))
     return model
