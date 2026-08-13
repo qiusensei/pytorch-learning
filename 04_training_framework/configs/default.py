@@ -9,5 +9,5 @@ num_epochs = 2
 lr = 1e-3
 train_batch_size = 64
 test_batch_size = 1000
-seed = 1000
+seed = 42
 device = "mps"

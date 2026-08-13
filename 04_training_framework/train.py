@@ -5,6 +5,7 @@ from datasets.mnist import get_loaders
 from utils.train import train_loop
 from utils.checkpoint import save_model
 from utils.plot import plot_img
+from utils.print import print_csv
 
 torch.manual_seed(cfg.seed)
 
@@ -16,4 +17,5 @@ losses, accs, epochs = train_loop(net, train_loader, test_loader,
 save_model(net)
 plot_img(epochs,losses,accs)
 
+print_csv(epochs,cfg.seed,losses,accs)
 print(f"Final acc: {accs[-1]:.4f}")
