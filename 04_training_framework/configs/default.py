@@ -1,0 +1,2 @@
+num_epochs = 10
+lr = 1e-3
