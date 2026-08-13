@@ -22,7 +22,7 @@ self.net = nn.Sequential(
 
 > train.py 里 net.train() / net.eval() 在切换什么?训练时按 p=0.5 随机丢弃,测试时全部保留——为什么测试不能随机丢?
 
-net.eval()会把模型调整为测试模式，这样nn.Drouout就不会生效。
+net.eval()会把模型调整为测试模式，这样nn.Dropout就不会生效。
 
 训练的时候是要使用Dropout，相当于训练了很多个子网络，来抗衡过拟合，最后测试的时候则不用Dropout是为了集成这些子网络的平均性能。
 

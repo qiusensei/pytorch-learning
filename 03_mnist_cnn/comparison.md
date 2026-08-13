@@ -2,7 +2,7 @@
 
 数据集：MNIST
 
-优化器：Aadm
+优化器：Adam
 
 lr = 1e-3
 
