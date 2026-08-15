@@ -9,12 +9,12 @@ from utils.checkpoint import save_model
 from utils.plot import plot_img
 from utils.print import print_csv
 
+torch.manual_seed(cfg.seed)
+
 b1 = model.Residual(1, 32, use_1x1conv=True, strides=1)
 
 b2 = nn.Sequential(*model.resnet_block(32, 32, 1, first_block=True))
 b3 = nn.Sequential(*model.resnet_block(32, 64, 1))
-
-torch.manual_seed(cfg.seed)
 
 net = nn.Sequential(b1, b2, b3,
                     nn.AdaptiveAvgPool2d((1,1)),                #What is AdaptiveAvgPool2d?

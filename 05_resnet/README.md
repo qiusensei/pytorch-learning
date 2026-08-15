@@ -59,17 +59,11 @@ accuracy=0.9895
 ## Question
 
 1. 几个 stage?每个 stage 堆几个 Residual? 
-
 2. stem 怎么设计? 
-
-3. 通道方案用 32→64→… 还是 16→32→…?
-
-4. 分类头为什么用 GlobalAvgPool 而不是 Flatten + Linear(784→10)?
-
+3. 分类头为什么用 GlobalAvgPool 而不是 Flatten + Linear(784→10)?
 
 ## Answer
 
-1. 因为MNIST数据集没有很大，且分辨率是28x28，因此选择2个stage，一个堆一个Res块就行了
-2. stem我打算就设计一个简单的projection，直接变成32通道就行，不降低分辨率
-3. 32-64
-4. GlobalAvgPool是对每个通道的整张特征图取一个平均值。[B, C, H, W] → [B, C, 1, 1],再 Flatten 成 [B, C]。这样既减少了参数量，也抹平了位置差异
+1. 因为MNIST数据集没有很大，且分辨率是28x28，因此选择2个stage，一个堆一个Res块就行了。
+2. stem我打算就设计一个简单的projection，直接变成32通道就行，不降低分辨率。
+3. GlobalAvgPool是对每个通道的整张特征图取一个平均值。[B, C, H, W] → [B, C, 1, 1],再 Flatten 成 [B, C]。这样既减少了参数量，也抹平了位置差异。使用AdaptiveAvgPool2d((1,1))实现。
