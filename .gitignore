@@ -6,3 +6,5 @@ checkpoints/
 .DS_Store
 .idea/
 data/
+plots/
+results/
