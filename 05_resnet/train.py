@@ -14,11 +14,11 @@ b1 = model.Residual(1, 32, use_1x1conv=True, strides=1)
 b2 = nn.Sequential(*model.resnet_block(32, 32, 1, first_block=True))
 b3 = nn.Sequential(*model.resnet_block(32, 64, 1))
 
+torch.manual_seed(cfg.seed)
+
 net = nn.Sequential(b1, b2, b3,
                     nn.AdaptiveAvgPool2d((1,1)),                #What is AdaptiveAvgPool2d?
                     nn.Flatten(), nn.Linear(64, 10)).to(cfg.device)
-
-torch.manual_seed(cfg.seed)
 
 train_loader,test_loader = get_loaders(cfg.DATA_DIR, cfg.train_batch_size, cfg.test_batch_size)
 losses, accs, epochs = train_loop(net, train_loader, test_loader,

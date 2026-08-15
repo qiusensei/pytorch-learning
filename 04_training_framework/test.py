@@ -16,3 +16,4 @@ test_loader = loader[1]
 acc = evaluate(net, test_loader, device)
 
 print(f"Test acc: {acc:.4f}")
+print("CNN params:", sum(p.numel() for p in net.parameters()))
