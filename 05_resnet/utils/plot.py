@@ -3,11 +3,11 @@ from pathlib import Path
 
 PLOT_DIR = Path(__file__).resolve().parents[1] / "plots"
 
-def plot_img(epoch_num, epoch_loss, epoch_acc):
+def plot_img(epoch_num, seed, lr, epoch_loss, epoch_acc, num_params):
     PLOT_DIR.mkdir(parents=True, exist_ok=True)
 
-    loss_path = PLOT_DIR / "loss_curve_resnet.png"
-    acc_path = PLOT_DIR / "accuracy_curve_resnet.png"
+    loss_path = PLOT_DIR / f"loss_curve_resnet_seed{seed}_lr{lr}_params{num_params}.png"
+    acc_path = PLOT_DIR / f"accuracy_curve_resnet_seed{seed}_lr{lr}_params{num_params}.png"
 
     plt.figure()
     plt.plot(epoch_num, epoch_loss, label="Train Loss", marker="o")

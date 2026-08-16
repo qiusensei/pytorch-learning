@@ -17,5 +17,6 @@ losses, accs, epochs = train_loop(net, train_loader, test_loader,
 save_model(net)
 plot_img(epochs,losses,accs)
 
-print_csv(epochs,cfg.seed,losses,accs)
+num_params = sum(p.numel() for p in net.parameters())
+print_csv(epochs,cfg.seed,cfg.lr,losses,accs,num_params)
 print(f"Final acc: {accs[-1]:.4f}")

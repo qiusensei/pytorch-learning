@@ -25,9 +25,9 @@ losses, accs, epochs = train_loop(net, train_loader, test_loader,
                           num_epochs=cfg.num_epochs, lr=cfg.lr, device=cfg.device)
 
 save_model(net)
-plot_img(epochs,losses,accs)
 
 num_params = sum(p.numel() for p in net.parameters())
 
+plot_img(epochs,cfg.seed,cfg.lr,losses,accs,num_params)
 print_csv(epochs,cfg.seed,cfg.lr,losses,accs,num_params)
 print(f"Final acc: {accs[-1]:.4f}")
