@@ -1,33 +1,15 @@
-import torch.nn as nn
-import torch
-
-from models import model
 from configs import default as cfg
-from datasets.datasets import get_loaders
-from utils.train import train_loop
-from utils.checkpoint import save_model
-from utils.plot import plot_img
-from utils.print import print_csv
+from utils.train import run_experiment
 
-torch.manual_seed(cfg.seed)
 
-b1 = model.Residual(1, 32, use_1x1conv=True, strides=1)
+if __name__ == "__main__":
+    summary = []
+    for seed in cfg.seeds:
+        for lr in cfg.lrs:
+            print(f"\n{'=' * 50}\nRunning: seed={seed}, lr={lr}\n{'=' * 50}")
+            summary.append(run_experiment(seed, lr, cfg))
 
-b2 = nn.Sequential(*model.resnet_block(32, 32, 1, first_block=True))
-b3 = nn.Sequential(*model.resnet_block(32, 64, 1))
-
-net = nn.Sequential(b1, b2, b3,
-                    nn.AdaptiveAvgPool2d((1,1)),
-                    nn.Flatten(), nn.Linear(64, 10)).to(cfg.device)
-
-train_loader,test_loader = get_loaders(cfg.DATA_DIR, cfg.train_batch_size, cfg.test_batch_size)
-losses, accs, epochs = train_loop(net, train_loader, test_loader,
-                          num_epochs=cfg.num_epochs, lr=cfg.lr, device=cfg.device)
-
-save_model(net)
-
-num_params = sum(p.numel() for p in net.parameters())
-
-plot_img(epochs,cfg.seed,cfg.lr,losses,accs,num_params)
-print_csv(epochs,cfg.seed,cfg.lr,losses,accs,num_params)
-print(f"Final acc: {accs[-1]:.4f}")
+    print(f"\n{'=' * 50}\nSummary\n{'=' * 50}")
+    print(f"{'seed':>6} {'lr':>9} {'last_acc':>10} {'best_acc':>10}")
+    for seed, lr, last, best in summary:
+        print(f"{seed:>6} {lr:>9} {last:>10.4f} {best:>10.4f}")

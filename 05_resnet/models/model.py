@@ -35,3 +35,15 @@ def resnet_block(input_channels, num_channels, num_residuals,
         else:
             blk.append(Residual(num_channels, num_channels))
     return blk
+
+
+def build_net(device):
+    b1 = Residual(1, 32, use_1x1conv=True, strides=1)
+    b2 = nn.Sequential(*resnet_block(32, 32, 1, first_block=True))
+    b3 = nn.Sequential(*resnet_block(32, 64, 1))
+    return nn.Sequential(
+        b1, b2, b3,
+        nn.AdaptiveAvgPool2d((1, 1)),
+        nn.Flatten(),
+        nn.Linear(64, 10),
+    ).to(device)

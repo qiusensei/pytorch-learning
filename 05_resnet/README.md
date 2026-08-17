@@ -77,3 +77,30 @@ accuracy=0.9895
 1. 因为MNIST数据集没有很大，且分辨率是28x28，因此选择2个stage，一个堆一个Res块就行了。
 2. stem我打算就设计一个简单的projection，直接变成32通道就行，不降低分辨率。
 3. GlobalAvgPool是对每个通道的整张特征图取一个平均值。[B, C, H, W] → [B, C, 1, 1],再 Flatten 成 [B, C]。这样既减少了参数量，也抹平了位置差异。使用AdaptiveAvgPool2d((1,1))实现。
+
+# 批量实验重构
+
+为了让"一次跑 3 个 seed × 3 个 lr"不再手动改配置，做了如下重构：
+
+## 改动
+
+- `models/model.py`：新增 `build_net(device)`，把搭网络的代码从 train/test 中抽出，统一复用。
+- `utils/train.py`：拆成两层
+  - `set_seed(seed, device)`：按设备设置随机种子（CPU / MPS / CUDA）。
+  - `train_loop(...)`：纯训练循环，返回每个 epoch 的 loss/acc。
+  - `run_experiment(seed, lr, cfg)`：编排一次完整实验（设种子→建模型→建数据→训练→保存→画图→写日志）。
+- `train.py`：瘦身为纯编排层，双层循环遍历 `cfg.seeds × cfg.lrs`，跑完打印汇总表。
+- `utils/checkpoint.py`：`save_model`/`load_model` 增加 `seed`、`lr` 参数，checkpoint 按 `mnist_resnet_seed{seed}_lr{lr}.pth` 命名，避免互相覆盖。
+- `configs/default.py`：`seed`/`lr` 改为列表 `seeds`/`lrs`；`device` 可在 `"mps"`/`"cuda"`/`"cpu"` 间切换。
+
+## 关键顺序
+
+每次实验必须按 `set_seed → build_net → get_loaders` 的顺序执行，否则随机初始化与数据 shuffle 无法按 seed 复现。
+
+## device 切换
+
+- `"mps"`：Apple Silicon GPU
+- `"cuda"`：NVIDIA GPU
+- `"cpu"`：纯 CPU
+
+所有 `.to(device)` 已贯穿模型、数据与评估，改 `configs/default.py` 里的 `device` 即可切换。

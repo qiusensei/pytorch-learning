@@ -1,16 +1,17 @@
 import torch
 from pathlib import Path
 
-CHECKPOINT_PATH = (
-        Path(__file__).resolve().parents[1]
-        / "checkpoints"
-        / "mnist_resnet.pth")
+CHECKPOINT_DIR = Path(__file__).resolve().parents[1] / "checkpoints"
 
 
-def save_model(model):
-    CHECKPOINT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    torch.save(model.state_dict(),CHECKPOINT_PATH)            #保存模型
+def save_model(model, seed, lr):
+    CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    path = CHECKPOINT_DIR / f"mnist_resnet_seed{seed}_lr{lr}.pth"
+    torch.save(model.state_dict(), path)
+    return path
 
-def load_model(model, device ,path=CHECKPOINT_PATH):
+
+def load_model(model, device, seed, lr):
+    path = CHECKPOINT_DIR / f"mnist_resnet_seed{seed}_lr{lr}.pth"
     model.load_state_dict(torch.load(path, map_location=device))
     return model
