@@ -99,8 +99,10 @@ accuracy=0.9895
 
 ## device 切换
 
+`configs/default.py` 里的 `device = pick_device()` 会自动检测设备（cuda > mps > cpu），换机器无需改配置。想强制指定可用 `pick_device("cuda")` / `pick_device("mps")` / `pick_device("cpu")`，设备不可用时会明确报错。
+
 - `"mps"`：Apple Silicon GPU
 - `"cuda"`：NVIDIA GPU
 - `"cpu"`：纯 CPU
 
-所有 `.to(device)` 已贯穿模型、数据与评估，改 `configs/default.py` 里的 `device` 即可切换。
+所有 `.to(device)` 已贯穿模型、数据与评估。

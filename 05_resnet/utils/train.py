@@ -56,10 +56,10 @@ def train_loop(model, train_loader, test_loader, num_epochs, lr, device):
 
 def run_experiment(seed, lr, cfg):
     """一次完整实验：设种子 → 建模型 → 建数据 → 训练 → 保存 → 记录"""
-    set_seed(seed, cfg.device)               # ① 最先设种子
+    set_seed(seed, cfg.device)                  # ① 最先设种子
 
-    net = build_net(cfg.device)              # ② 再建模型
-    train_loader, test_loader = get_loaders(  # ③ 再建 DataLoader
+    net = build_net(cfg.device)                 # ② 再建模型
+    train_loader, test_loader = get_loaders(    # ③ 再建 DataLoader
         cfg.DATA_DIR, cfg.train_batch_size, cfg.test_batch_size
     )
 

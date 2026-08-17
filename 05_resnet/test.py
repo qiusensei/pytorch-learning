@@ -4,8 +4,6 @@ from utils.checkpoint import load_model
 from models.model import build_net
 from datasets.datasets import get_loaders
 
-
-# 改成你想测试的那次实验对应的 seed/lr（默认取列表第一组）
 seed = cfg.seeds[0]
 lr = cfg.lrs[0]
 
